@@ -1,4 +1,4 @@
-services:
+gitservices:
   - type: web
     name: funda-app
     env: python
