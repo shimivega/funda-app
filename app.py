@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -23,6 +24,10 @@ database_url = os.environ.get("DATABASE_URL")
 if not database_url:
     # Fallback to SQLite for development
     database_url = "sqlite:///funda.db"
+
+# Handle postgres:// URLs for deployment (Render uses postgres:// which needs to be postgresql://)
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
@@ -64,6 +69,10 @@ def allowed_file(filename):
 def allowed_audio_file(filename):
     """Check if file extension is allowed for audio uploads."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_AUDIO_EXTENSIONS
+
+# Configure logging
+log_level = os.environ.get('LOG_LEVEL', 'INFO').upper()
+logging.basicConfig(level=getattr(logging, log_level, logging.INFO))
 
 with app.app_context():
     # Import models to ensure they're registered

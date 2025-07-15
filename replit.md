@@ -125,8 +125,19 @@ Preferred communication style: Simple, everyday language.
 
 ## Development Notes
 
-- The application uses a simple file-based architecture without a database
+### Recent Changes (July 15, 2025)
+- Fixed deployment compatibility issues for Render and GitHub
+- Added proper database URL handling for PostgreSQL deployments
+- Created comprehensive deployment files (build.sh, render.yaml, Procfile)
+- Implemented environment-based configuration for production deployments
+- Added proper logging configuration with environment controls
+- Fixed PostgreSQL connection string handling (postgres:// -> postgresql://)
+- Created deployment documentation and security guidelines
+
+### Architecture Notes
+- The application uses PostgreSQL database with SQLAlchemy ORM
 - Video content is organized hierarchically by grade and subject
 - Live classes are integrated through Jitsi Meet's web SDK
 - The platform is designed for easy extension with additional subjects or grades
-- Current implementation supports basic CRUD operations for video content
+- Full CRUD operations for all interactive features
+- Role-based access control with secure admin functionality
