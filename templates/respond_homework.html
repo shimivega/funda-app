@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Respond to Homework Request - Funda{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('homework_requests') }}">Homework Requests</a></li>
+        <li class="breadcrumb-item active">Respond</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-4">
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="fas fa-reply me-2"></i>Respond to Homework Request
+            </h1>
+            <p class="lead text-muted">Provide feedback and guidance to your student</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <!-- Student Request Details -->
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-user-graduate me-2"></i>Student Request Details
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-user me-2"></i>Student:</h6>
+                        <p class="mb-3">{{ request.learner.name }}</p>
+                        
+                        <h6><i class="fas fa-envelope me-2"></i>Email:</h6>
+                        <p class="mb-3">{{ request.learner.email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-calendar me-2"></i>Submitted:</h6>
+                        <p class="mb-3">{{ request.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        
+                        <h6><i class="fas fa-info-circle me-2"></i>Current Status:</h6>
+                        <p class="mb-3">
+                            <span class="badge bg-{{ 'success' if request.status == 'completed' else 'danger' if request.status == 'rejected' else 'secondary' }}">
+                                {{ request.status.title() }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                <h6><i class="fas fa-question-circle me-2"></i>Student's Request:</h6>
+                <div class="p-3 bg-light rounded">
+                    {{ request.content }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Form -->
+        <div class="card shadow border-0">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-edit me-2"></i>Your Response
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.response.label(class="form-label") }}
+                        {{ form.response(class="form-control", rows="6") }}
+                        {% if form.response.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.response.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Provide helpful feedback, guidance, or homework assignments.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.status.label(class="form-label") }}
+                        {{ form.status(class="form-select") }}
+                        {% if form.status.errors %}
+                            <div class="text-danger small">
+                                {% for error in form.status.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            <strong>Pending:</strong> Still working on the response<br>
+                            <strong>Completed:</strong> Request has been addressed<br>
+                            <strong>Rejected:</strong> Request cannot be fulfilled
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-warning btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Previous Response (if exists) -->
+        {% if request.response %}
+        <div class="card shadow border-0 mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Previous Response
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="p-3 bg-light rounded mb-3">
+                    {{ request.response }}
+                </div>
+                <small class="text-muted">
+                    Last updated: {{ request.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                </small>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('homework_requests') }}" class="btn btn-secondary me-2">
+        <i class="fas fa-arrow-left me-2"></i>Back to Requests
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-home me-2"></i>Dashboard
+    </a>
+</div>
+{% endblock %}

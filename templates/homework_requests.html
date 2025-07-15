@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Homework Requests - Funda{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Homework Requests</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-4">
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="fas fa-clipboard-list me-2"></i>Homework Requests
+            </h1>
+            <p class="lead text-muted">Manage student homework requests and responses</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow border-0">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-inbox me-2"></i>Student Requests
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if requests %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Request</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in requests %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-user-circle fa-2x text-primary me-2"></i>
+                                                <div>
+                                                    <strong>{{ request.learner.name }}</strong>
+                                                    <br>
+                                                    <small class="text-muted">{{ request.learner.email }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="mb-1">{{ request.content[:100] }}{% if request.content|length > 100 %}...{% endif %}</p>
+                                            {% if request.response %}
+                                                <small class="text-muted">
+                                                    <strong>Your Response:</strong> {{ request.response[:50] }}{% if request.response|length > 50 %}...{% endif %}
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if request.status == 'completed' else 'danger' if request.status == 'rejected' else 'secondary' }}">
+                                                {{ request.status.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                <strong>Created:</strong> {{ request.created_at.strftime('%Y-%m-%d %H:%M') }}<br>
+                                                {% if request.updated_at != request.created_at %}
+                                                    <strong>Updated:</strong> {{ request.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                                                {% endif %}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('respond_homework', request_id=request.id) }}" 
+                                               class="btn btn-sm btn-warning">
+                                                <i class="fas fa-reply me-1"></i>
+                                                {{ 'Update' if request.response else 'Respond' }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-clipboard-list fa-4x mb-3"></i>
+                        <h5>No Homework Requests</h5>
+                        <p>Students haven't sent any homework requests yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Chat with {{ teacher.name }} - Funda{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Chat with {{ teacher.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-4">
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="fas fa-comments me-2"></i>Chat with {{ teacher.name }}
+            </h1>
+            <p class="lead text-muted">Send messages, voice notes, and homework requests</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Communication Form -->
+    <div class="col-md-8">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-paper-plane me-2"></i>Send a Message
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Write a message</label>
+                        <textarea name="comment" id="comment" class="form-control" rows="3" 
+                                  placeholder="Write a message to your teacher..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="voice_note" class="form-label">Upload a Voice Note</label>
+                        <input type="file" name="voice_note" id="voice_note" class="form-control" accept="audio/*">
+                        <div class="form-text">Supported formats: MP3, WAV, OGG, M4A, AAC</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="homework_request" class="form-label">Homework Request</label>
+                        <textarea name="homework_request" id="homework_request" class="form-control" rows="3" 
+                                  placeholder="What homework do you have or what do you want to learn?"></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Info -->
+    <div class="col-md-4">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-user-circle me-2"></i>Teacher Information
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-chalkboard-teacher fa-4x text-success"></i>
+                </div>
+                <h4 class="card-title">{{ teacher.name }}</h4>
+                <p class="card-text">
+                    <strong>Subjects:</strong><br>
+                    {% if teacher.get_teacher_subjects() %}
+                        {% for subject in teacher.get_teacher_subjects() %}
+                            <span class="badge bg-secondary me-1">{{ subject }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-muted">No subjects assigned</span>
+                    {% endif %}
+                </p>
+                <p class="card-text">
+                    <strong>Email:</strong> {{ teacher.email }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Previous Communications -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow border-0">
+            <div class="card-header bg-info text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Previous Communications
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="communicationAccordion">
+                    <!-- Comments -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#commentsCollapse">
+                                <i class="fas fa-comment me-2"></i>Messages ({{ comments|length }})
+                            </button>
+                        </h2>
+                        <div id="commentsCollapse" class="accordion-collapse collapse show" data-bs-parent="#communicationAccordion">
+                            <div class="accordion-body">
+                                {% if comments %}
+                                    {% for comment in comments %}
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <small class="text-muted">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                                </div>
+                                                <p class="card-text">{{ comment.content }}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-center text-muted py-4">
+                                        <i class="fas fa-comment fa-3x mb-3"></i>
+                                        <p>No messages sent yet</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Homework Requests -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#homeworkCollapse">
+                                <i class="fas fa-clipboard-list me-2"></i>Homework Requests ({{ homework_requests|length }})
+                            </button>
+                        </h2>
+                        <div id="homeworkCollapse" class="accordion-collapse collapse" data-bs-parent="#communicationAccordion">
+                            <div class="accordion-body">
+                                {% if homework_requests %}
+                                    {% for request in homework_requests %}
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <small class="text-muted">{{ request.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                                        <span class="badge bg-{{ 'success' if request.status == 'completed' else 'danger' if request.status == 'rejected' else 'secondary' }} ms-2">
+                                                            {{ request.status.title() }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <p class="card-text"><strong>Request:</strong> {{ request.content }}</p>
+                                                {% if request.response %}
+                                                    <p class="card-text"><strong>Teacher's Response:</strong> {{ request.response }}</p>
+                                                    <small class="text-muted">Updated: {{ request.updated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-center text-muted py-4">
+                                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                                        <p>No homework requests sent yet</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Voice Notes -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#voiceNotesCollapse">
+                                <i class="fas fa-microphone me-2"></i>Voice Notes ({{ voice_notes|length }})
+                            </button>
+                        </h2>
+                        <div id="voiceNotesCollapse" class="accordion-collapse collapse" data-bs-parent="#communicationAccordion">
+                            <div class="accordion-body">
+                                {% if voice_notes %}
+                                    {% for voice_note in voice_notes %}
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="fas fa-microphone me-2"></i>
+                                                        <strong>{{ voice_note.original_filename or voice_note.filename }}</strong>
+                                                        <br>
+                                                        <small class="text-muted">{{ voice_note.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                                    </div>
+                                                    <audio controls>
+                                                        <source src="{{ url_for('serve_voice_note', filename=voice_note.filename) }}" type="audio/mpeg">
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-center text-muted py-4">
+                                        <i class="fas fa-microphone fa-3x mb-3"></i>
+                                        <p>No voice notes sent yet</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}

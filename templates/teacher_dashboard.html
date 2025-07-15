@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard - Funda{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="fas fa-chalkboard-teacher me-2"></i>Welcome, {{ current_user.name }}!
+            </h1>
+            <div>
+                <a href="{{ url_for('notifications') }}" class="btn btn-info me-2">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                    {% if notifications %}
+                        <span class="badge bg-danger">{{ notifications|length }}</span>
+                    {% endif %}
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Notifications -->
+    <div class="col-md-6">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-bell me-2"></i>Recent Notifications
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if notifications %}
+                    <div class="list-group list-group-flush">
+                        {% for notification in notifications[:5] %}
+                            <div class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p class="mb-1">{{ notification.message }}</p>
+                                    <small class="text-muted">{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <span class="badge bg-{{ 'warning' if notification.notification_type == 'homework' else 'primary' if notification.notification_type == 'comment' else 'success' }}">
+                                    {{ notification.notification_type.title() }}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if notifications|length > 5 %}
+                        <div class="text-center mt-3">
+                            <a href="{{ url_for('notifications') }}" class="btn btn-sm btn-info">
+                                View All Notifications
+                            </a>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-bell fa-3x mb-3"></i>
+                        <p>No new notifications</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Homework Requests -->
+    <div class="col-md-6">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-clipboard-list me-2"></i>Homework Requests
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if homework_requests %}
+                    <div class="list-group list-group-flush">
+                        {% for request in homework_requests[:5] %}
+                            <div class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ request.learner.name }}</h6>
+                                    <p class="mb-1">{{ request.content[:100] }}{% if request.content|length > 100 %}...{% endif %}</p>
+                                    <small class="text-muted">{{ request.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-{{ 'success' if request.status == 'completed' else 'danger' if request.status == 'rejected' else 'secondary' }} mb-2">
+                                        {{ request.status.title() }}
+                                    </span>
+                                    <br>
+                                    <a href="{{ url_for('respond_homework', request_id=request.id) }}" 
+                                       class="btn btn-sm btn-warning">
+                                        <i class="fas fa-reply me-1"></i>Respond
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if homework_requests|length > 5 %}
+                        <div class="text-center mt-3">
+                            <a href="{{ url_for('homework_requests') }}" class="btn btn-sm btn-warning">
+                                View All Requests
+                            </a>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                        <p>No homework requests</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Subject Areas -->
+    <div class="col-md-8">
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-book me-2"></i>Your Teaching Areas
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if current_user.get_teacher_subjects() %}
+                    <div class="row g-3">
+                        {% for subject in current_user.get_teacher_subjects() %}
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 bg-light">
+                                    <div class="card-body text-center">
+                                        <div class="mb-3">
+                                            {% if subject == 'Math' %}
+                                                <i class="fas fa-calculator fa-3x text-primary"></i>
+                                            {% elif subject == 'Science' %}
+                                                <i class="fas fa-atom fa-3x text-success"></i>
+                                            {% elif subject == 'English' %}
+                                                <i class="fas fa-language fa-3x text-info"></i>
+                                            {% elif subject == 'Life Orientation' %}
+                                                <i class="fas fa-users fa-3x text-warning"></i>
+                                            {% else %}
+                                                <i class="fas fa-book fa-3x text-secondary"></i>
+                                            {% endif %}
+                                        </div>
+                                        <h5 class="card-title">{{ subject }}</h5>
+                                        <p class="card-text">Manage classes for all grades</p>
+                                        <div class="dropdown">
+                                            <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="fas fa-cog me-1"></i>Manage
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                {% for grade in range(1, 13) %}
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ url_for('subject_page', grade=grade, subject=subject) }}">
+                                                            <i class="fas fa-book me-2"></i>Grade {{ grade }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        No subjects assigned. Please contact an administrator.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-md-4">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-lightning-bolt me-2"></i>Quick Actions
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-3">
+                    <a href="{{ url_for('notifications') }}" class="btn btn-outline-info">
+                        <i class="fas fa-bell me-2"></i>View All Notifications
+                    </a>
+                    <a href="{{ url_for('homework_requests') }}" class="btn btn-outline-warning">
+                        <i class="fas fa-clipboard-list me-2"></i>Homework Requests
+                    </a>
+                    <a href="{{ url_for('grade_page', grade=1) }}" class="btn btn-outline-success">
+                        <i class="fas fa-upload me-2"></i>Upload Videos
+                    </a>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-home me-2"></i>Browse All Classes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow border-0">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Teacher Tools
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-video fa-3x text-primary mb-2"></i>
+                            <h5>Live Classes</h5>
+                            <p class="text-muted">Host live video classes using integrated Jitsi Meet.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-upload fa-3x text-success mb-2"></i>
+                            <h5>Video Upload</h5>
+                            <p class="text-muted">Upload and organize educational videos by grade and subject.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-comments fa-3x text-warning mb-2"></i>
+                            <h5>Student Communication</h5>
+                            <p class="text-muted">Receive messages, voice notes, and homework requests from students.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

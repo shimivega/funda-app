@@ -2,7 +2,7 @@
 
 ## Overview
 
-Funda is a Flask-based educational platform designed for grades 1-12. It provides a structured learning environment with live classes, video content management, and organized subject-based navigation. The platform focuses on four core subjects: Math, Science, English, and Life Orientation.
+Funda is a Flask-based educational platform designed for grades 1-12. It provides a structured learning environment with live classes, video content management, organized subject-based navigation, and interactive communication features. The platform focuses on four core subjects: Math, Science, English, and Life Orientation, with full user authentication and student-teacher interaction capabilities.
 
 ## User Preferences
 
@@ -19,10 +19,13 @@ Preferred communication style: Simple, everyday language.
 
 ### Backend Architecture
 - **Framework**: Flask (Python web framework)
-- **File Upload**: Werkzeug for secure file handling
+- **Database**: PostgreSQL with SQLAlchemy ORM
+- **Authentication**: Flask-Login for user session management
+- **Forms**: Flask-WTF with WTForms for secure form handling
+- **File Upload**: Werkzeug for secure file handling (videos and audio)
 - **Session Management**: Flask sessions with configurable secret key
 - **Logging**: Python's built-in logging module
-- **File Storage**: Local filesystem for video uploads
+- **File Storage**: Local filesystem for video uploads and voice notes
 
 ### Data Structure
 - **Grades**: Simple list (1-12)
@@ -31,26 +34,46 @@ Preferred communication style: Simple, everyday language.
 
 ## Key Components
 
-### 1. Navigation System
+### 1. User Authentication & Authorization
+- **Registration System**: Students and teachers can register with role-based accounts
+- **Login System**: Secure authentication with session management
+- **Role-Based Access**: Different dashboard views and permissions for students/teachers
+- **User Profiles**: Name, email, grade (students), subjects (teachers)
+
+### 2. Navigation System
 - **Grade Selection**: Landing page with grade 1-12 buttons
 - **Subject Selection**: Grade-specific subject navigation
 - **Breadcrumb Navigation**: Hierarchical navigation support
+- **Role-Based Navigation**: Dynamic navbar based on user authentication status
 
-### 2. Video Management
-- **Upload System**: Supports MP4, AVI, MOV, MKV, WebM formats
+### 3. Video Management
+- **Upload System**: Supports MP4, AVI, MOV, MKV, WebM formats (teacher-only)
 - **File Size Limit**: 500MB maximum per upload
 - **Organization**: Videos organized by grade and subject folders
 - **Security**: Filename sanitization using `secure_filename`
 
-### 3. Live Classes
+### 4. Live Classes
 - **Integration**: Jitsi Meet embedded for real-time video classes
 - **Access**: Subject-specific live class rooms
 - **UI**: Responsive video container with join functionality
 
-### 4. User Interface
+### 5. Interactive Communication
+- **Comments System**: Students can send messages to teachers
+- **Voice Notes**: Audio file uploads for student-teacher communication
+- **Homework Requests**: Students can request homework assignments
+- **Notifications**: Real-time notification system for teachers
+- **Response System**: Teachers can respond to student requests with status updates
+
+### 6. Dashboard Systems
+- **Student Dashboard**: Quick access to enrolled grade classes and teacher list
+- **Teacher Dashboard**: Notifications, homework requests, and class management
+- **Grade Navigation**: Easy access to all grade levels and subjects
+
+### 7. User Interface
 - **Responsive Design**: Mobile-first approach with Bootstrap
 - **Theme**: Educational color scheme (Sea Green primary, Royal Blue secondary)
 - **Accessibility**: ARIA labels and semantic HTML structure
+- **Interactive Elements**: Accordions, modals, and form validation
 
 ## Data Flow
 

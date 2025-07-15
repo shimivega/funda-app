@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - Funda{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="fas fa-user-graduate me-2"></i>Welcome, {{ current_user.name }}!
+            </h1>
+            <div>
+                <a href="{{ url_for('notifications') }}" class="btn btn-info me-2">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Quick Access to Grades -->
+    <div class="col-md-8">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-school me-2"></i>Quick Access - Your Classes
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if current_user.grade %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You are enrolled in Grade {{ current_user.grade }}
+                    </div>
+                    <div class="row g-3">
+                        {% for subject in ['Math', 'Science', 'English', 'Life Orientation'] %}
+                            <div class="col-md-6">
+                                <a href="{{ url_for('subject_page', grade=current_user.grade, subject=subject) }}" 
+                                   class="btn btn-outline-primary btn-lg w-100">
+                                    {% if subject == 'Math' %}
+                                        <i class="fas fa-calculator me-2"></i>
+                                    {% elif subject == 'Science' %}
+                                        <i class="fas fa-atom me-2"></i>
+                                    {% elif subject == 'English' %}
+                                        <i class="fas fa-language me-2"></i>
+                                    {% elif subject == 'Life Orientation' %}
+                                        <i class="fas fa-users me-2"></i>
+                                    {% endif %}
+                                    {{ subject }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        No grade assigned. Please contact an administrator.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Browse All Grades -->
+        <div class="card shadow border-0">
+            <div class="card-header bg-success text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-book me-2"></i>Browse All Grades
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    {% for grade in range(1, 13) %}
+                        <div class="col-md-2 col-sm-3 col-4">
+                            <a href="{{ url_for('grade_page', grade=grade) }}" 
+                               class="btn btn-outline-success w-100">
+                                <i class="fas fa-book me-1"></i>Grade {{ grade }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teachers & Communication -->
+    <div class="col-md-4">
+        <div class="card shadow border-0">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>Your Teachers
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if teachers %}
+                    <div class="list-group list-group-flush">
+                        {% for teacher in teachers %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ teacher.name }}</h6>
+                                    <small class="text-muted">
+                                        {% if teacher.get_teacher_subjects() %}
+                                            {{ teacher.get_teacher_subjects()|join(', ') }}
+                                        {% else %}
+                                            Teacher
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <a href="{{ url_for('interact', teacher_id=teacher.id) }}" 
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-comments me-1"></i>Chat
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-chalkboard-teacher fa-3x mb-3"></i>
+                        <p>No teachers available yet</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow border-0">
+            <div class="card-header bg-info text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Getting Started
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-video fa-3x text-info mb-2"></i>
+                            <h5>Join Live Classes</h5>
+                            <p class="text-muted">Click on any subject to join live video classes with your teachers.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-play-circle fa-3x text-success mb-2"></i>
+                            <h5>Watch Recorded Videos</h5>
+                            <p class="text-muted">Access pre-recorded lessons anytime in each subject area.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-comments fa-3x text-warning mb-2"></i>
+                            <h5>Chat with Teachers</h5>
+                            <p class="text-muted">Send messages, voice notes, and homework requests to your teachers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
