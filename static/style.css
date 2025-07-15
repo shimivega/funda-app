@@ -1,0 +1,363 @@
+/* Custom CSS for Funda Educational Platform */
+
+:root {
+    --primary-color: #2E8B57; /* Sea Green */
+    --secondary-color: #4169E1; /* Royal Blue */
+    --accent-color: #32CD32; /* Lime Green */
+    --success-color: #228B22; /* Forest Green */
+    --warning-color: #FFA500; /* Orange */
+    --info-color: #00CED1; /* Dark Turquoise */
+    --light-bg: #F8F9FA;
+    --dark-text: #2C3E50;
+    --muted-text: #6C757D;
+}
+
+/* Override Bootstrap primary colors */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #246440;
+    border-color: #246440;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/* Custom button styles */
+.grade-btn {
+    border-radius: 15px;
+    padding: 15px 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid var(--primary-color);
+}
+
+.grade-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(46, 139, 87, 0.3);
+}
+
+.subject-btn {
+    border-radius: 15px;
+    padding: 20px 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid var(--success-color);
+    min-height: 120px;
+}
+
+.subject-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(34, 139, 34, 0.3);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-success:hover {
+    background-color: #1e7e1e;
+    border-color: #1e7e1e;
+}
+
+.btn-outline-success {
+    color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.bg-success {
+    background-color: var(--success-color) !important;
+}
+
+/* Info color customization */
+.btn-info {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #00B8C7;
+    border-color: #00B8C7;
+}
+
+.bg-info {
+    background-color: var(--info-color) !important;
+}
+
+/* Warning color customization */
+.btn-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #E6940A;
+    border-color: #E6940A;
+}
+
+.bg-warning {
+    background-color: var(--warning-color) !important;
+}
+
+/* Body and general styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    line-height: 1.6;
+}
+
+/* Navbar customization */
+.navbar-brand {
+    font-size: 1.5rem;
+    color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: var(--dark-text) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Card customization */
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card-header {
+    border-bottom: none;
+    font-weight: 600;
+    padding: 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Alert customization */
+.alert {
+    border-radius: 10px;
+    border: none;
+    font-weight: 500;
+}
+
+/* Breadcrumb customization */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--success-color);
+}
+
+/* Modal customization */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    background-color: var(--light-bg);
+}
+
+/* Video container */
+#jitsi-container {
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .display-5 {
+        font-size: 1.8rem;
+    }
+    
+    .display-6 {
+        font-size: 1.5rem;
+    }
+    
+    .grade-btn {
+        padding: 10px 5px;
+        font-size: 0.9rem;
+    }
+    
+    .subject-btn {
+        padding: 15px 10px;
+        min-height: 100px;
+    }
+    
+    .subject-btn i {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--success-color);
+}
+
+/* Form styling */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25);
+}
+
+/* Feature cards on home page */
+.card h-100 {
+    transition: all 0.3s ease;
+}
+
+.card:hover h-100 {
+    transform: translateY(-5px);
+}
+
+/* Video grid styling */
+.video-grid .card {
+    border: 1px solid rgba(46, 139, 87, 0.1);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.video-grid .card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.2);
+}
+
+/* Success states */
+.alert-success {
+    background-color: rgba(34, 139, 34, 0.1);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* Progress indicators */
+.progress {
+    height: 6px;
+    border-radius: 3px;
+    background-color: rgba(46, 139, 87, 0.1);
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+}
+
+/* Utility classes */
+.text-muted {
+    color: var(--muted-text) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(46, 139, 87, 0.1) !important;
+}
+
+.shadow {
+    box-shadow: 0 0.5rem 1rem rgba(46, 139, 87, 0.15) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(46, 139, 87, 0.175) !important;
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.form-control:focus,
+.nav-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+}
