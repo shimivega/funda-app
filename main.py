@@ -346,6 +346,41 @@ def uploaded_video(filename):
     """Serve uploaded video files."""
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    """Admin dashboard with system overview."""
+    if current_user.role != 'admin':
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('dashboard'))
+
+    users = User.query.all()
+    comments = Comment.query.all()
+    requests = HomeworkRequest.query.all()
+    notifications = Notification.query.all()
+    voice_notes = VoiceNote.query.all()
+    
+    # Get some statistics
+    stats = {
+        'total_users': len(users),
+        'total_students': len([u for u in users if u.role == 'student']),
+        'total_teachers': len([u for u in users if u.role == 'teacher']),
+        'total_comments': len(comments),
+        'total_requests': len(requests),
+        'pending_requests': len([r for r in requests if r.status == 'pending']),
+        'total_notifications': len(notifications),
+        'unread_notifications': len([n for n in notifications if not n.is_read]),
+        'total_voice_notes': len(voice_notes)
+    }
+    
+    return render_template('admin.html', 
+                         users=users, 
+                         comments=comments, 
+                         requests=requests,
+                         notifications=notifications,
+                         voice_notes=voice_notes,
+                         stats=stats)
+
 @app.errorhandler(413)
 def too_large(e):
     """Handle file too large error."""

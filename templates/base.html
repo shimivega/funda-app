@@ -52,6 +52,12 @@
                                 <li><a class="dropdown-item" href="{{ url_for('notifications') }}">
                                     <i class="fas fa-bell me-2"></i>Notifications
                                 </a></li>
+                                {% if current_user.role == 'admin' %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">
+                                        <i class="fas fa-cogs me-2"></i>Admin Dashboard
+                                    </a></li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for('logout') }}">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout

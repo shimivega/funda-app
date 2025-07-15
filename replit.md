@@ -37,8 +37,10 @@ Preferred communication style: Simple, everyday language.
 ### 1. User Authentication & Authorization
 - **Registration System**: Students and teachers can register with role-based accounts
 - **Login System**: Secure authentication with session management
-- **Role-Based Access**: Different dashboard views and permissions for students/teachers
+- **Role-Based Access**: Different dashboard views and permissions for students/teachers/admin
 - **User Profiles**: Name, email, grade (students), subjects (teachers)
+- **Admin Security**: Admin dashboard only accessible to users with admin role
+- **Access Control**: Protected routes with role-based authorization
 
 ### 2. Navigation System
 - **Grade Selection**: Landing page with grade 1-12 buttons
@@ -67,6 +69,7 @@ Preferred communication style: Simple, everyday language.
 ### 6. Dashboard Systems
 - **Student Dashboard**: Quick access to enrolled grade classes and teacher list
 - **Teacher Dashboard**: Notifications, homework requests, and class management
+- **Admin Dashboard**: System overview with user management and content oversight
 - **Grade Navigation**: Easy access to all grade levels and subjects
 
 ### 7. User Interface

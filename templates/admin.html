@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Funda{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Admin Dashboard</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-4">
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="fas fa-cogs me-2"></i>Admin Dashboard
+            </h1>
+            <p class="lead text-muted">System overview and management</p>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_users }}</h4>
+                        <p class="card-text">Total Users</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_students }}</h4>
+                        <p class="card-text">Students</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-graduate fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_teachers }}</h4>
+                        <p class="card-text">Teachers</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chalkboard-teacher fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.pending_requests }}</h4>
+                        <p class="card-text">Pending Requests</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clock fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_comments }}</h4>
+                        <p class="card-text">Comments</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-comments fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_requests }}</h4>
+                        <p class="card-text">Homework Requests</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-question-circle fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_notifications }}</h4>
+                        <p class="card-text">Notifications</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-bell fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-purple text-white" style="background-color: #6f42c1 !important;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ stats.total_voice_notes }}</h4>
+                        <p class="card-text">Voice Notes</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-microphone fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Users Section -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-users me-2"></i>All Users ({{ stats.total_users }})
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Grade/Subjects</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>
+                            <strong>{{ user.name }}</strong>
+                            {% if user.role == 'admin' %}
+                                <span class="badge bg-danger ms-2">Admin</span>
+                            {% elif user.role == 'teacher' %}
+                                <span class="badge bg-info ms-2">Teacher</span>
+                            {% else %}
+                                <span class="badge bg-success ms-2">Student</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role.title() }}</td>
+                        <td>
+                            {% if user.role == 'student' and user.grade %}
+                                Grade {{ user.grade }}
+                            {% elif user.role == 'teacher' and user.subjects %}
+                                {{ user.subjects }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Comments Section -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-comments me-2"></i>Recent Comments ({{ stats.total_comments }})
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Content</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments %}
+                    <tr>
+                        <td>{{ comment.id }}</td>
+                        <td>{{ comment.author.name }}</td>
+                        <td>{{ comment.target.name }}</td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 300px;">
+                                {{ comment.content }}
+                            </div>
+                        </td>
+                        <td>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Homework Requests Section -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-question-circle me-2"></i>Homework Requests ({{ stats.total_requests }})
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Teacher</th>
+                        <th>Request</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <td>{{ req.id }}</td>
+                        <td>{{ req.learner.name }}</td>
+                        <td>{{ req.teacher.name }}</td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 300px;">
+                                {{ req.content }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if req.status == 'completed' else 'danger' if req.status == 'rejected' else 'secondary' }}">
+                                {{ req.status.title() }}
+                            </span>
+                        </td>
+                        <td>{{ req.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications Section -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-header bg-info text-white">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-bell me-2"></i>Recent Notifications ({{ stats.total_notifications }})
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Message</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notification in notifications %}
+                    <tr>
+                        <td>{{ notification.id }}</td>
+                        <td>{{ notification.user.name }}</td>
+                        <td>
+                            <div class="text-truncate" style="max-width: 300px;">
+                                {{ notification.message }}
+                            </div>
+                        </td>
+                        <td>{{ notification.notification_type.title() }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if notification.is_read else 'warning' }}">
+                                {{ 'Read' if notification.is_read else 'Unread' }}
+                            </span>
+                        </td>
+                        <td>{{ notification.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Voice Notes Section -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-header text-white" style="background-color: #6f42c1;">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-microphone me-2"></i>Voice Notes ({{ stats.total_voice_notes }})
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Original Filename</th>
+                        <th>System Filename</th>
+                        <th>Upload Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voice_note in voice_notes %}
+                    <tr>
+                        <td>{{ voice_note.id }}</td>
+                        <td>{{ voice_note.learner.name }}</td>
+                        <td>{{ voice_note.original_filename }}</td>
+                        <td>{{ voice_note.filename }}</td>
+                        <td>{{ voice_note.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}

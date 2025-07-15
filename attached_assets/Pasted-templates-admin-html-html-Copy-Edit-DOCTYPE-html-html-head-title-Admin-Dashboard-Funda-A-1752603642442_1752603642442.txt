@@ -1,0 +1,97 @@
+templates/admin.html
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard - Funda App</title>
+  <style>
+    body { font-family: Arial; margin: 20px; background: #f7f7f7; }
+    h1 { color: #333; }
+    section { margin-bottom: 30px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 10px; border-bottom: 1px solid #ccc; text-align: left; }
+    th { background: #f0f0f0; }
+    .section-title { margin-bottom: 5px; font-size: 18px; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+
+  <!-- Users Section -->
+  <section>
+    <div class="section-title">All Users</div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.role }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Comments Section -->
+  <section>
+    <div class="section-title">Learner Comments</div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Author</th>
+          <th>Target</th>
+          <th>Content</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comment in comments %}
+          <tr>
+            <td>{{ comment.id }}</td>
+            <td>{{ comment.author_id }}</td>
+            <td>{{ comment.target_id }}</td>
+            <td>{{ comment.content }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Homework Requests -->
+  <section>
+    <div class="section-title">Homework Requests</div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Learner</th>
+          <th>Teacher</th>
+          <th>Request</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in requests %}
+          <tr>
+            <td>{{ req.id }}</td>
+            <td>{{ req.learner_id }}</td>
+            <td>{{ req.teacher_id }}</td>
+            <td>{{ req.content }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+</body>
+</html>
