@@ -77,5 +77,7 @@ logging.basicConfig(level=getattr(logging, log_level, logging.INFO))
 with app.app_context():
     # Import models to ensure they're registered
     import models
-    db.create_all() 
+    db.create_all()
+
+# Import routes after app setup
 import main

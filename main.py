@@ -394,8 +394,5 @@ def not_found(e):
         return redirect(url_for('dashboard'))
     return render_template('index.html', grades=GRADES), 404
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
-    app.run(host='0.0.0.0', port=port, debug=debug)
-return "Hello from Funda App!"
+# Import routes into app
+from app import app
